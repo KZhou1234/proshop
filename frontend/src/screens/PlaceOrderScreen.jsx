@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
@@ -15,6 +15,7 @@ const PlaceOrderScreen = () => {
     const cart = useSelector((state) => state.cart);
 
     const [createOrder, { isLoading, error }] = useCreateOrderMutation();
+   
     useEffect(() => {
         if(!cart.shippingAddress.address) {
             navigate('/shipping');
@@ -26,17 +27,17 @@ const PlaceOrderScreen = () => {
     const placeOrderHandler = async () => {
         try {
             const res = await createOrder({
-                orderItems: cart.cartItems, 
+                orderItems: cart.cartItems,
                 shippingAddress: cart.shippingAddress,
                 paymentMethod: cart.paymentMethod,
                 itemsPrice: cart.itemsPrice,
                 shippingPrice: cart.shippingPrice,
                 taxPrice: cart.taxPrice,
                 totalPrice: cart.totalPrice,
-            }).unwrap();
+              }).unwrap();
 
             dispatch(clearCartItems());
-            navigate(`/order/${res._id}`);
+            navigate(`/orders/${res._id}`);
         } catch (error) {
             toast.error(error);
         }
@@ -52,7 +53,9 @@ const PlaceOrderScreen = () => {
                     <h2>Shipping</h2>
                     <p>
                         <strong> Address:</strong>
-                        {cart.shippingAddress.address}, {cart.shippingAddress.city} {cart.shippingAddress.postalCode}, {cart.shippingAddress.country}
+                        {cart.shippingAddress.address}, {cart.shippingAddress.city}{' '}
+                {cart.shippingAddress.postalCode},{' '}
+                {cart.shippingAddress.country}
                     </p>
                 </ListGroup.Item>
 
@@ -68,7 +71,7 @@ const PlaceOrderScreen = () => {
                         <Message> Your cart is empty </Message>
                     ) : (
                         <ListGroup variant='flush' >
-                            {cart.cartItems.map((item, index) => (
+                            {cart.cartItems.map((item, index) =>(
                                 <ListGroup.Item key={index}>
                                     <Row>
                                         <Col md={1}>
@@ -131,7 +134,7 @@ const PlaceOrderScreen = () => {
                     </ListGroup.Item>
 
                     <ListGroup.Item>
-                        { error && <Message variant='danger'>{error}</Message> }
+                        { error && (<Message variant='danger'>{error.data.message}</Message>) }
                     </ListGroup.Item>
 
                     <ListGroup.Item>
