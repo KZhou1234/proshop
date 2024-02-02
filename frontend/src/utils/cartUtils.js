@@ -5,12 +5,13 @@ export const addDecimals = (num) => {
 
 export const updateCart = (state) => {
      //accumulate items price
-     state.itemsPrice = addDecimals(state.cartItems.reduce((acc, item) => acc + item * item.qty, 0));            
+     state.itemsPrice = addDecimals(
+        state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0));            
      //shipping price 
      state.shippingPrice = addDecimals(state.itemsPrice > 50 ? 0 : 5.99);
 
      //tax price
-     state.taxPrice = addDecimals(Number(state.itemsPrice * 0.0875).toFixed(2));
+     state.taxPrice = addDecimals(Number((state.itemsPrice * 0.0875).toFixed(2)));
  
      //total price
      state.totalPrice = (
