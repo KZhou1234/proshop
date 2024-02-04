@@ -42,7 +42,6 @@ const ProductEditScreen = () => {
         }
     }, [product]);
 
-
     const submitHandler = async (e) => {
         e.preventDefault();
         const updatedProduct = {
@@ -64,6 +63,7 @@ const ProductEditScreen = () => {
             navigate('/admin/productlist');
         }
     };
+    
     const uploadFileHandler = async (e) => {
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
@@ -86,12 +86,14 @@ const ProductEditScreen = () => {
     <FormContainer>
         <h1>Edit Product</h1>
         { loadingUpdate && <Loader />}
-        { isLoading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : ( 
+        { isLoading ? (
+        <Loader /> ): error ? (
+        <Message variant='danger'>{error}</Message>) : ( 
                 <Form onSubmit={ submitHandler }>
                     <Form.Group controlId='name' className='my-2'>
                         <Form.Label>Name</Form.Label>
                         <Form.Control
-                        type='text'
+                        type='name'
                         placeholder='Enter Name'
                         value={name}
                         onChange={(e) => setName(e.target.value)}>
